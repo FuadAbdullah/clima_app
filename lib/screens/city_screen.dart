@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 
 class CityScreen extends StatefulWidget {
+  final String cityName;
+
+  CityScreen({
+    required this.cityName,
+  });
+
   @override
   _CityScreenState createState() => _CityScreenState();
 }
 
 class _CityScreenState extends State<CityScreen> {
+  String? cityName;
+
+  @override
+  void initState() {
+    super.initState();
+    cityName = widget.cityName;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +38,9 @@ class _CityScreenState extends State<CityScreen> {
               Align(
                 alignment: Alignment.topLeft,
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop(widget.cityName);
+                  },
                   child: Icon(
                     Icons.arrow_back_ios,
                     size: 50.0,
@@ -33,10 +49,24 @@ class _CityScreenState extends State<CityScreen> {
               ),
               Container(
                 padding: EdgeInsets.all(20.0),
-                child: null,
+                child: TextFormField(
+                  initialValue: cityName,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                  decoration: kTextFieldInputDecoration,
+                  onChanged: (value) {
+                    setState(() {
+                      cityName = value;
+                    });
+                  },
+                ),
               ),
               FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(cityName == '' ? widget.cityName : cityName);
+                },
                 child: Text(
                   'Get Weather',
                   style: kButtonTextStyle,
