@@ -12,47 +12,9 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  void testLocationPermission() {
-    Geolocator.isLocationServiceEnabled().then(
-      (bool allowed) {
-        if (!allowed) {
-          print('Location services are disabled');
-        }
-
-        Geolocator.checkPermission().then(
-          (LocationPermission permission) {
-            if (permission == LocationPermission.denied) {
-              Geolocator.requestPermission().then(
-                (LocationPermission permission) {
-                  if (permission == LocationPermission.denied) {
-                    print('Location permissions are denied');
-                  }
-                },
-              );
-            }
-
-            if (permission == LocationPermission.deniedForever) {
-              print(
-                  'Location permissions are permanently denied, we cannot request permission.');
-            }
-
-            Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low)
-                .then(
-              (Position pos) {
-                print(pos);
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
   void getLocationData() async {
     Map<String, dynamic> weatherData =
         await WeatherModel().getLocationWeather();
-
-    print(weatherData.keys);
 
     if (weatherData['error'] is FlutterError) {
       await Alert(
