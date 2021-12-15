@@ -1,7 +1,10 @@
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
-const String apiKey = ''; // Removed the API key
+const String apiKey =
+    ''; // Remove the API key before push to remote repository. If accidentally pushed, revoke and create a new one
 const String openWeatherMapURL =
     'https://api.openweathermap.org/data/2.5/weather';
 
@@ -10,7 +13,13 @@ class WeatherModel {
     NetworkHelper networkHelper = NetworkHelper(
         url: '$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric');
 
-    return await networkHelper.getData();
+    Either<Map<String, dynamic>, FlutterError> fetchedData =
+        await networkHelper.getData();
+
+    return fetchedData.fold(
+      (l) => l,
+      (r) => {'error': r},
+    );
   }
 
   Future<Map<String, dynamic>> getLocationWeather() async {
@@ -21,7 +30,13 @@ class WeatherModel {
         url:
             '$openWeatherMapURL?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&appid=$apiKey&units=metric');
 
-    return await networkHelper.getData();
+    Either<Map<String, dynamic>, FlutterError> fetchedData =
+        await networkHelper.getData();
+
+    return fetchedData.fold(
+      (l) => l,
+      (r) => {'error': r},
+    );
   }
 
   String getWeatherIcon(int condition) {
